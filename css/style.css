@@ -6,7 +6,49 @@ body{
     background-color: azure;
 }
 
-.img-circle{
+.container{
+    width: 100%;
+}
+.header img{
+    margin-top: 10px;
+    float: left;
     width: 300px;
     border-radius: 100%;
+    padding: 10px;
+    margin-left: 20px;
+    background-color: aquamarine;
+}
+
+.header{
+    position: relative;
+    min-height: 360px;
+    max-height: 360px;
+}
+
+.header h1{
+    text-align: center;
+}
+.descrição{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 400px;
+    transform: translate(0, -50%)
+}
+
+.habilidades{
+    padding-left: 35px;
+}
+
+.hardskills{
+    list-style-type: circle;
+}
+
+li{
+    margin-bottom: 5px;
+}
+
+.imparskill{
+    color: brown;
+    text-decoration: overline;
 }
