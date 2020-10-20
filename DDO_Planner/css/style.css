@@ -1,0 +1,38 @@
+table, td{
+	border: 2px solid black;
+	text-align: center;
+	overflow: hidden;
+}
+input{
+	width: 40px;
+	text-align: center;
+}
+.title{
+	width: 120px;
+	text-align: center;
+}
+.pointsC{
+	width: 10px;
+	height: 12px;
+}
+.titleCOL1{
+	width: 80px;
+}
+.titleCOL2{
+	width: 120px;
+}
+.titleclasschoice{
+	width: 75px;
+	height: 20px;
+	text-align: center;
+}
+#skilltable{
+	table-layout: fixed;
+	width: 1300px;
+}
+.nameskill{
+	width: 110px;
+}
+#skilltable.td{
+	width: 20px;
+}

@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Planner</title>
+	<meta charset="utf-8">
+	<script src="js/basePoints.js"></script>
+	<script src="js/calc.js"></script>
+	<script src="js/addSubStats.js"></script>
+	<script src="js/mod.js"></script>
+	<script src="js/skillPoints.js"></script>
+	<script src="js/class.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+	<form>
+	<table id="attributes">
+		<tr>
+			<td class="titleCOL1">Name</td>
+			<td class="titleCOL2"><input type="text" name="Name" id="name" class="title"></td>
+			<td><input type="radio" name="points" class="pointsC" id="radio4" value="32" onchange="changepoints('radio4');racepointbonus();"><input type="text" id="champion" value="32pt"></td>
+			<td colspan="2">Points <input type="text" id="remainingpoints" readonly="true" value="28" min="0" max="28"></td>
+		</tr>
+		<tr>
+			<td class="titleCOL1">Race</td>
+			<td class="titleCOL2"><select name="race" class="title" id="selectrace" onchange="racepointbonus();drowpoint();modall();">
+				<option value="None"></option>
+				<option value="Aasimar">Aasimar</option>
+				<option value="Dragonborn">Dragonborn</option>
+				<option value="Dwarf">Dwarf</option>
+				<option value="Drow">Drow</option>
+				<option value="Elf">Elf</option>
+				<option value="Gnome">Gnome</option>
+				<option value="Half Elf">Half Elf</option>
+				<option value="Halfling">Halfling</option>
+				<option value="Half Orc">Half Orc</option>
+				<option value="Human">Human</option>
+				<option value="Tiefling">Tiefling</option>
+				<option value="Warforged">Warforged</option>
+				<option value="Wood Elf">Wood Elf</option>
+			</select></td>
+			<td><input type="radio" name="points" class="pointsC" id="radio1" value="28" onchange="changepoints('radio1');racepointbonus();" checked><input type="text" id="firstlife" value="28pt"></td>
+			<td><input type="radio" name="points" class="pointsC" id="radio2" value="34" onchange="changepoints('radio2');racepointbonus();"><input type="text" id="secondlife" value="34pt"></td>
+			<td><input type="radio" name="points" class="pointsC" id="radio3" value="36" onchange="changepoints('radio3');racepointbonus();"><input type="text" id="thirdlife" value="36pt"></td>
+		</tr>
+		<tr>
+			<td class="titleCOL1">Status</td>
+			<td class="titleCOL2">Base</td>
+			<td>Bonus</td>
+			<td>Total</td>
+			<td>Mod</td>
+			<td>Tome</td>
+		</tr>
+		<tr>
+			<td class="titleCOL1">Strenght</td>
+			<td class="titleCOL2">
+				<button type="button" class="bt_decreaseStats" onclick="subAttribute('str','total_str','strValue');mod('mod_str','total_str','modstr');"><img src="img/icons/menos.png"></button>
+				<input type="number" class="strValue" name="STR" id="str" value="8" min="8" max="18" readonly="true">
+				<button type="button" onclick="addAttribute('str','total_str','strValue');mod('mod_str','total_str','modstr');"><img src="img/icons/mais.png"></button></td>
+			<td><input type="number" class="strValue" name="Bonus_STR" id="bonus_str" value="0" readonly="true"></td>
+			<td><input type="number" name="Total_STR" id="total_str" readonly="true" value="8"></td>
+			<td><input type="number" name="Mod_STR" id="mod_str" value="-1" readonly="true"></td>
+			<td><select name="tomescore" id="tome_str" class="strValue" onchange="calcSum('total_str','strValue');mod('mod_str','total_str','modstr');"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></td>
+		</tr>
+		<tr>
+			<td class="titleCOL1">Dexterity</td>
+			<td class="titleCOL2">
+				<button type="button" class="bt_decreaseStats" onclick="subAttribute('dex','total_dex','dexValue');mod('mod_dex','total_dex','moddex')";><img src="img/icons/menos.png"></button>
+				<input type="number" class="dexValue" name="DEX" id="dex" value="8" min="8" max="18" readonly="true">
+				<button type="button" onclick="addAttribute('dex', 'total_dex', 'dexValue');mod('mod_dex','total_dex','moddex')";><img src="img/icons/mais.png"></button></td>
+			<td><input type="number" class="dexValue" name="Bonus_DEX" id="bonus_dex" value="0" readonly="true"></td>
+			<td><input type="number" name="Total_DEX" id="total_dex" readonly="true" value="8"></td>
+			<td><input type="number" name="Mod_DEX" id="mod_dex" value="-1" readonly="true"></td>
+			<td><select name="tomescore" id="tome_dex" class="dexValue" onchange="calcSum('total_dex','dexValue');mod('mod_dex','total_dex','moddex');"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></td>
+		</tr>
+		<tr>
+			<td class="titleCOL1">Constitution</td>
+			<td class="titleCOL2">
+				<button type="button" class="bt_decreaseStats" onclick="subAttribute('con','total_con','conValue');mod('mod_con','total_con','modcon')";><img src="img/icons/menos.png"></button>
+				<input type="number" class="conValue" name="CON" id="con" value="8" min="8" max="18" readonly="true">
+				<button type="button" onclick="addAttribute('con','total_con','conValue');mod('mod_con','total_con','modcon')";><img src="img/icons/mais.png"></button></td>
+			<td><input type="number" class="conValue" name="Bonus_CON" id="bonus_con" value="0" readonly="true"></td>
+			<td><input type="number" name="Total_CON" id="total_con" value="0" readonly="true" onchange="mod('con','bonus_con','total_con','mod_con')"></td>
+			<td><input type="number" name="Mod_CON" id="mod_con" value="-1" readonly="true"></td>
+			<td><select name="tomescore" id="tome_con" class="conValue" onchange="calcSum('total_con','conValue');mod('mod_con','total_con','modcon');"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></td>
+		</tr>
+		<tr>
+			<td class="titleCOL1">Intelligence</td>
+			<td class="titleCOL2">
+				<button type="button" class="bt_decreaseStats" onclick="subAttribute('int','total_int','intValue');mod('mod_int','total_int','modint')";><img src="img/icons/menos.png"></button>
+				<input type="number" class="intValue" name="INT" id="int" value="8" min="8" max="18" readonly="true">
+				<button type="button" onclick="addAttribute('int','total_int','intValue');mod('mod_int','total_int','modint')";><img src="img/icons/mais.png"></button></td>
+			<td><input type="number" class="intValue" name="Bonus_INT" id="bonus_int" value="0" readonly="true"></td>
+			<td><input type="number" name="Total_INT" id="total_int" value="0" readonly="true" onchange="mod('int','bonus_int','total_int');"></td>
+			<td><input type="number" name="Mod_INT" id="mod_int" value="-1" readonly="true"></td>
+			<td><select name="tomescore" id="tome_int" class="intValue" onchange="calcSum('total_int','intValue');mod('mod_int','total_int','modint');"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></td>
+		</tr>
+		<tr>
+			<td class="titleCOL1">Wisdom</td>
+			<td class="titleCOL2">
+				<button type="button" class="bt_decreaseStats" onclick="subAttribute('wis','total_wis','wisValue');mod('mod_wis','total_wis','modwis')";><img src="img/icons/menos.png"></button>
+				<input type="number" class="wisValue" name="WIS" id="wis" value="8" min="8" max="18" readonly="true">
+				<button type="button" onclick="addAttribute('wis','total_wis','wisValue');mod('mod_wis','total_wis','modwis')";><img src="img/icons/mais.png"></button></td>
+			<td><input type="number" class="wisValue" name="Bonus_WIS" id="bonus_wis" value="0" readonly="true"></td>
+			<td><input type="number" name="Total_WIS" id="total_wis" value="0" readonly="true" onchange="mod('wis','bonus_wis','total_wis','modwis')"></td>
+			<td><input type="number" name="Mod_WIS" id="mod_wis" value="-1" readonly="true"></td>
+			<td><select name="tomescore" id="tome_wis" class="wisValue" onchange="calcSum('total_wis','wisValue');mod('mod_wis','total_wis')"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></td>
+		</tr>
+		<tr>
+			<td class="titleCOL1">Charisma</td>
+			<td class="titleCOL2">
+				<button type="button" class="bt_decreaseStats" onclick="subAttribute('cha','total_cha','chaValue');mod('mod_cha','total_cha','modcha')";><img src="img/icons/menos.png"></button>
+				<input type="number" class="chaValue" name="CHA" id="cha" value="8" min="8" max="18" readonly="true">
+				<button type="button" onclick="addAttribute('cha','total_cha','chaValue');mod('mod_cha','total_cha','modcha')";><img src="img/icons/mais.png"></button></td>
+			<td><input type="number" class="chaValue" name="Bonus_CHA" id="bonus_cha" value="0" readonly="true"></td>
+			<td><input type="number" name="Total_CHA" id="total_cha" value="0" readonly="true" onchange="mod('cha','bonus_cha','total_cha')"></td>
+			<td><input type="number" name="Mod_CHA" id="mod_cha" value="-1" readonly="true"></td>
+			<td><select name="tomescore" id="tome_cha" class="chaValue" onchange="calcSum('total_cha','chaValue');mod('mod_cha','total_cha','modcha')"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></td>
+		</tr>
+		<tr>
+
+		</tr>
+	</table>
+	<table id="classes">
+		<tr>
+			<td>Select Classes</td>
+			<td>
+				<select id="class1" class="titleclasschoice" onchange="selectclass('classopt1','class1');classskillall('classchoice1')">
+				<option value="None"></option>
+				<option value="Artificer">Artificer</option>
+				<option value="Barbarian">Barbarian</option>
+				<option value="Bard">Bard</option>
+				<option value="Cleric">Cleric</option>
+				<option value="Druid">Druid</option>
+				<option value="Fighter">Fighter</option>
+				<option value="FavoredSoul">Favored Soul</option>
+				<option value="Monk">Monk</option>
+				<option value="Paladin">Paladin</option>
+				<option value="Ranger">Ranger</option>
+				<option value="Rogue">Rogue</option>
+				<option value="Sorcerer">Sorcerer</option>
+				<option value="Warlock">Warlock</option>
+				<option value="Wizard">Wizard</option>
+				</select>
+			</td>
+			<td>
+				<select id="class2" class="titleclasschoice" onchange="selectclass('classopt2','class2');">
+				<option value="None"></option>
+				<option value="Artificer">Artificer</option>
+				<option value="Barbarian">Barbarian</option>
+				<option value="Bard">Bard</option>
+				<option value="Cleric">Cleric</option>
+				<option value="Druid">Druid</option>
+				<option value="Fighter">Fighter</option>
+				<option value="FavoredSoul">Favored Soul</option>
+				<option value="Monk">Monk</option>
+				<option value="Paladin">Paladin</option>
+				<option value="Ranger">Ranger</option>
+				<option value="Rogue">Rogue</option>
+				<option value="Sorcerer">Sorcerer</option>
+				<option value="Warlock">Warlock</option>
+				<option value="Wizard">Wizard</option>
+				</select>
+			</td>
+			<td>
+				<select id="class3" class="titleclasschoice" onchange="selectclass('classopt3','class3');">
+				<option value="None"></option>
+				<option value="Artificer">Artificer</option>
+				<option value="Barbarian">Barbarian</option>
+				<option value="Bard">Bard</option>
+				<option value="Cleric">Cleric</option>
+				<option value="Druid">Druid</option>
+				<option value="Fighter">Fighter</option>
+				<option value="FavoredSoul">Favored Soul</option>
+				<option value="Monk">Monk</option>
+				<option value="Paladin">Paladin</option>
+				<option value="Ranger">Ranger</option>
+				<option value="Rogue">Rogue</option>
+				<option value="Sorcerer">Sorcerer</option>
+				<option value="Warlock">Warlock</option>
+				<option value="Wizard">Wizard</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+	<table id="skilltable">
+		<tr>
+			<td class="nameskill">Class</td>
+			<td><select id="classchoice1" class="classlist" onchange="classskill('classchoice1',1);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice2" class="classlist" onchange="classskill('classchoice2',2);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice3" class="classlist" onchange="classskill('classchoice3',3);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice4" class="classlist" onchange="classskill('classchoice4',4);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice5" class="classlist" onchange="classskill('classchoice5',5);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice6" class="classlist" onchange="classskill('classchoice6',6);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice7" class="classlist" onchange="classskill('classchoice7',7);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice8" class="classlist" onchange="classskill('classchoice8',8);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice9" class="classlist" onchange="classskill('classchoice9',9);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice10" class="classlist" onchange="classskill('classchoice10',10);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice11" class="classlist" onchange="classskill('classchoice11',11);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice12" class="classlist" onchange="classskill('classchoice12',12);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice13" class="classlist" onchange="classskill('classchoice13',13);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice14" class="classlist" onchange="classskill('classchoice14',14);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice15" class="classlist" onchange="classskill('classchoice15',15);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice16" class="classlist" onchange="classskill('classchoice16',16);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice17" class="classlist" onchange="classskill('classchoice17',17);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice18" class="classlist" onchange="classskill('classchoice18',18);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice19" class="classlist" onchange="classskill('classchoice19',19);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+			<td><select id="classchoice20" class="classlist" onchange="classskill('classchoice20',20);">
+				<option class="classopt1"></option>
+				<option class="classopt2"></option>
+				<option class="classopt3"></option>
+			</select></td>
+		</tr>
+		<tr id="Level">
+			<td class="nameskill">Level</td>
+			<td>01</td>
+			<td>02</td>
+			<td>03</td>
+			<td>04</td>
+			<td>05</td>
+			<td>06</td>
+			<td>07</td>
+			<td>08</td>
+			<td>09</td>
+			<td>10</td>
+			<td>11</td>
+			<td>12</td>
+			<td>13</td>
+			<td>14</td>
+			<td>15</td>
+			<td>16</td>
+			<td>17</td>
+			<td>18</td>
+			<td>19</td>
+			<td>20</td>
+		</tr>
+		<tr id="SkillPoints">
+			<td>Points</td>
+			<td><input type="number" id="skilllvl1" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl2" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl3" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl4" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl5" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl6" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl7" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl8" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl9" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl10" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl11" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl12" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl13" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl14" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl15" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl16" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl17" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl18" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl19" min="0" class="skilllvl" readonly="true"></td>
+			<td><input type="number" id="skilllvl20" min="0" class="skilllvl" readonly="true"></td>
+			<td>Mod</td>
+			<td>Bonus</td>
+			<td>Total</td>
+		</tr>
+		<tr id="Jump">
+			<td class="nameskill">Jump</td>
+			<td><input type="number" id="jump1"	class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump2" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump3" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump4" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump5" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump6" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump7" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump8" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump9" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump10" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump11" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump12" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump13" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump14" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump15" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump16" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump17" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump18" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump19" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="jump20" class="jumpbase" min="0" value="0" onchange="calcSumSkillBase('totaljump','jumpbase','modstr');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modstr" readonly="true"></td>
+			<td><input type="number" class="bonusjump" readonly="true"></td>
+			<td><input type="number" id="totaljump" readonly="true"></td>
+		</tr>
+		<tr id="Swim">
+			<td class="nameskill">Swim</td>
+			<td><input type="number" id="swim1"	class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim2" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim3" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim4" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim5" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim6" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim7" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim8" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim9" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim10" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim11" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim12" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim13" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim14" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim15" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim16" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim17" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim18" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim19" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="swim20" class="swimbase" min="0" value="0" onchange="calcSumSkillBase('totalswim','swimbase','modstr');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modstr" readonly="true"></td>
+			<td><input type="number" class="bonusswim" readonly="true"></td>
+			<td><input type="number" id="totalswim" readonly="true"></td>
+		</tr>
+		<tr id="Balance">
+			<td class="nameskill">Balance</td>
+			<td><input type="number" id="balance1"	class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance2" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance3" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance4" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance5" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance6" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance7" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance8" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance9" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance10" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance11" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance12" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance13" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance14" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance15" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance16" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance17" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance18" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance19" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="balance20" class="balancebase" min="0" value="0" onchange="calcSumSkillBase('totalbalance','balancebase','modstr');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modstr" readonly="true"></td>
+			<td><input type="number" class="bonusbalance" readonly="true"></td>
+			<td><input type="number" id="totalbalance" readonly="true"></td>
+		</tr>
+		<tr id="Hide">
+			<td class="nameskill">Hide</td>
+			<td><input type="number" id="hide1"	class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide2" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide3" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide4" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide5" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide6" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide7" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide8" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide9" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide10" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide11" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide12" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide13" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide14" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide15" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide16" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide17" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide18" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide19" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="hide20" class="hidebase" min="0" value="0" onchange="calcSumSkillBase('totalhide','hidebase','moddex');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="moddex" readonly="true"></td>
+			<td><input type="number" class="bonushide" readonly="true"></td>
+			<td><input type="number" id="totalhide" readonly="true"></td>
+		</tr>
+		<tr id="MoveSilent">
+			<td class="nameskill">Move Silently</td>
+			<td><input type="number" id="movesilent1" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent2" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent3" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent4" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent5" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent6" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent7" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent8" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent9" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent10" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent11" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent12" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent13" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent14" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent15" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent16" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent17" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent18" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent19" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="movesilent20" class="movesilentbase" min="0" value="0" onchange="calcSumSkillBase('totalmovesilent','movesilentbase','moddex');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="moddex" readonly="true"></td>
+			<td><input type="number" class="bonusmovesilent" readonly="true"></td>
+			<td><input type="number" id="totalmovesilent" readonly="true"></td>
+		</tr>
+		<tr id="OpenLock">
+			<td class="nameskill">Open Lock</td>
+			<td><input type="number" id="openlock1" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock2" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock3" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock4" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock5" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock6" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock7" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock8" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock9" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock10" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock11" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock12" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock13" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock14" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock15" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock16" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock17" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock18" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock19" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="openlock20" class="openlockbase" min="0" value="0" onchange="calcSumSkillBase('totalopenlock','openlockbase','moddex');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="moddex" readonly="true"></td>
+			<td><input type="number" class="bonusopenlock" readonly="true"></td>
+			<td><input type="number" id="totalopenlock" readonly="true"></td>
+		</tr>
+		<tr id="Tumble">
+			<td class="nameskill">Tumble</td>
+			<td><input type="number" id="tumble1" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble2" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble3" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble4" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble5" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble6" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble7" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble8" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble9" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble10" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble11" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble12" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble13" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble14" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble15" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble16" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble17" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble18" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble19" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="tumble20" class="tumblebase" min="0" value="0" onchange="calcSumSkillBase('totaltumble','tumblebase','moddex');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="moddex" readonly="true"></td>
+			<td><input type="number" class="bonustumble" readonly="true"></td>
+			<td><input type="number" id="totaltumble" readonly="true"></td>
+		</tr>
+		<tr id="Concentration">
+			<td class="nameskill">Concentration</td>
+			<td><input type="number" id="concentrat1" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat2" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat3" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat4" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat5" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat6" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat7" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat8" class="concentrat7ase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat9" class="concentrat8ase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat10" class="concentra9base" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat11" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat12" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat13" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat14" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat15" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat16" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat17" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat18" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat19" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="concentrat20" class="concentratbase" min="0" value="0" onchange="calcSumSkillBase('totalconcentrat','concentratbase','modcon');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modcon" readonly="true"></td>
+			<td><input type="number" class="bonusconcentrat" readonly="true"></td>
+			<td><input type="number" id="totalconcentrat" readonly="true"></td>
+		</tr>
+		<tr id="DisableDivice">
+			<td class="nameskill">Disable Divice</td>
+			<td><input type="number" id="ddivice1" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice2" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice3" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice4" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice5" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice6" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice7" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice8" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice9" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice10" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice11" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice12" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice13" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice14" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice15" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice16" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice17" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice18" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice19" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="ddivice20" class="ddivicebase" min="0" value="0" onchange="calcSumSkillBase('totalddivice','ddivicebase','modint');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modint" readonly="true"></td>
+			<td><input type="number" class="bonusddivice" readonly="true"></td>
+			<td><input type="number" id="totalddivice" readonly="true"></td>
+		</tr>
+		<tr id="Repair">
+			<td class="nameskill">Repair</td>
+			<td><input type="number" id="repair1" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair2" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair3" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair4" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair5" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair6" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair7" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair8" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair9" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair10" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair11" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair12" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair13" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair14" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair15" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair16" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair17" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair18" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair19" clas9s="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="repair20" class="repairbase" min="0" value="0" onchange="calcSumSkillBase('totalrepair','repairbase','modint');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modint" readonly="true"></td>
+			<td><input type="number" class="bonusrepair" readonly="true"></td>
+			<td><input type="number" id="totalrepair" readonly="true"></td>
+		</tr>
+		<tr id="Search">
+			<td class="nameskill">Search</td>
+			<td><input type="number" id="search1" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search2" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search3" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search4" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search5" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search6" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search7" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search8" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search9" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search10" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search11" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search12" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search13" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search14" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search15" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search16" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search17" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search18" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search19" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="search20" class="searchbase" min="0" value="0" onchange="calcSumSkillBase('totalsearch','searchbase','modint');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modint" readonly="true"></td>
+			<td><input type="number" class="bonussearch" readonly="true"></td>
+			<td><input type="number" id="totalsearch" readonly="true"></td>
+		</tr>
+		<tr id="Spellcraft">
+			<td class="nameskill">Spellcraft</td>
+			<td><input type="number" id="spellcraft1" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft2" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft3" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft4" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft5" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft6" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft7" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft8" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft9" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft10" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft11" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft12" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft13" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft14" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft15" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft16" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft17" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft18" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft19" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spellcraft20" class="spellcraftbase" min="0" value="0" onchange="calcSumSkillBase('totalspellcraft','spellcraftbase','modint');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modint" readonly="true"></td>
+			<td><input type="number" class="bonusspellcraft" readonly="true"></td>
+			<td><input type="number" id="totalspellcraft" readonly="true"></td>
+		</tr>
+		<tr id="Heal">
+			<td class="nameskill">Heal</td>
+			<td><input type="number" id="heal1" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal2" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal3" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal4" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal5" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal6" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal7" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal8" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal9" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal10" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal11" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal12" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal13" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal14" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal15" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal16" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal17" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal18" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal19" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="heal20" class="healbase" min="0" value="0" onchange="calcSumSkillBase('totalheal','healbase','modwis');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modwis" readonly="true"></td>
+			<td><input type="number" class="bonusheal" readonly="true"></td>
+			<td><input type="number" id="totalheal" readonly="true"></td>
+		</tr>
+		<tr id="Listen">
+			<td class="nameskill">Listen</td>
+			<td><input type="number" id="listen1" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen2" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen3" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen4" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen5" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen6" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen7" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen8" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen9" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen10" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen11" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen12" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen13" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen14" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen15" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen16" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen17" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen18" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen19" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="listen20" class="listenbase" min="0" value="0" onchange="calcSumSkillBase('totallisten','listenbase','modwis');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modwis" readonly="true"></td>
+			<td><input type="number" class="bonuslisten" readonly="true"></td>
+			<td><input type="number" id="totallisten" readonly="true"></td>
+		</tr>
+		<tr id="Spot">
+			<td class="nameskill">Spot</td>
+			<td><input type="number" id="spot1" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot2" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot3" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot4" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot5" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot6" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot7" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot8" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot9" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot10" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot11" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot12" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot13" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot14" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot15" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot16" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot17" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot18" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot19" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="spot20" class="spotbase" min="0" value="0" onchange="calcSumSkillBase('totalspot','spotbase','modwis');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modwis" readonly="true"></td>
+			<td><input type="number" class="bonusspot" readonly="true"></td>
+			<td><input type="number" id="totalspot" readonly="true"></td>
+		</tr>
+		<tr id="Bluff">
+			<td class="nameskill">Bluff</td>
+			<td><input type="number" id="bluff1" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff2" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff3" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff4" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff5" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff6" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff7" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff8" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff9" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff10" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff11" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff12" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff13" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff14" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff15" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff16" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff17" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff18" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff19" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="bluff20" class="bluffbase" min="0" value="0" onchange="calcSumSkillBase('totalbluff','bluffbase','modcha');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modcha" readonly="true"></td>
+			<td><input type="number" class="bonusbluff" readonly="true"></td>
+			<td><input type="number" id="totalbluff" readonly="true"></td>
+		</tr>
+		<tr id="Diplomacy">
+			<td class="nameskill">Diplomacy</td>
+			<td><input type="number" id="diplomacy1" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy2" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy3" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy4" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy5" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy6" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy7" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy8" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy9" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy10" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy11" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy12" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy13" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy14" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy15" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy16" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy17" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy18" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy19" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="diplomacy20" class="diplomacybase" min="0" value="0" onchange="calcSumSkillBase('totaldiplomacy','diplomacybase','modcha');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modcha" readonly="true"></td>
+			<td><input type="number" class="bonusdiplomacy" readonly="true"></td>
+			<td><input type="number" id="totaldiplomacy" readonly="true"></td>
+		</tr>
+		<tr id="Haggle">
+			<td class="nameskill">Haggle</td>
+			<td><input type="number" id="haggle1" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle2" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle3" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle4" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle5" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle6" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle7" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle8" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle9" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle10" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle11" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle12" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle13" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle14" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle15" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle16" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle17" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle18" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle19" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="haggle20" class="hagglebase" min="0" value="0" onchange="calcSumSkillBase('totalhaggle','hagglebase','modcha');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modcha" readonly="true"></td>
+			<td><input type="number" class="bonushaggle" readonly="true"></td>
+			<td><input type="number" id="totalhaggle" readonly="true"></td>
+		</tr>
+		<tr id="Intimidate">
+			<td class="nameskill">Intimidate</td>
+			<td><input type="number" id="intimi1" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi2" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi3" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi4" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi5" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi6" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi7" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi8" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi9" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi10" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi11" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi12" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi13" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi14" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi15" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi16" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi17" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi18" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi19" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="intimi20" class="intimibase" min="0" value="0" onchange="calcSumSkillBase('totalintimi','intimibase','modcha');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modcha" readonly="true"></td>
+			<td><input type="number" class="bonusintimi" readonly="true"></td>
+			<td><input type="number" id="totalintimi" readonly="true"></td>
+		</tr>
+		<tr id="Peform">
+			<td class="nameskill">Perform</td>
+			<td><input type="number" id="perform1" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform2" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform3" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform4" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform5" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform6" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform7" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform8" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform9" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform10" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform11" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform12" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform13" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform14" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform15" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform16" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform17" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform18" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform19" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="perform20" class="performbase" min="0" value="0" onchange="calcSumSkillBase('totalperform','performbase','modcha');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modcha" readonly="true"></td>
+			<td><input type="number" class="bonusperform" readonly="true"></td>
+			<td><input type="number" id="totalperform" readonly="true"></td>
+		</tr>
+		<tr id="UMD">
+			<td class="nameskill">UMD</td>
+			<td><input type="number" id="umd1" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '1');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd2" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '2');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd3" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '3');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd4" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '4');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd5" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '5');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd6" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '6');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd7" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '7');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd8" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '8');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd9" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '9');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd10" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '10');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd11" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '11');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd12" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '12');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd13" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '13');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd14" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '14');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd15" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '15');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd16" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '16');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd17" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '17');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd18" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '18');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd19" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '19');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" id="umd20" class="umdbase" min="0" value="0" onchange="calcSumSkillBase('totalumd','umdbase','modcha');speddingSkillPoint(this.id, '20');" onmouseover="saveSkillPoint(this.id)"></td>
+			<td><input type="number" class="modcha" readonly="true"></td>
+			<td><input type="number" class="bonusumd" readonly="true"></td>
+			<td><input type="number" id="totalumd" readonly="true"></td>
+		</tr>
+	</table>
+	</form>
+
+</body>
+</html>
