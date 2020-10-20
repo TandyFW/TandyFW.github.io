@@ -5,3 +5,8 @@
 body{
     background-color: azure;
 }
+
+img.img-circle{
+    width: 300px;
+    border-radius: 100%;
+}
